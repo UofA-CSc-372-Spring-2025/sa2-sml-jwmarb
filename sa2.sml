@@ -103,6 +103,22 @@ val () =
   [2,1]
 *)
 (**** Problem D ****)
+exception EmptyList
+
+fun minlist ([]: int list): int = raise EmptyList
+  | minlist (x::xs) = List.foldl Int.min x xs
+
+val () =
+  Unit.checkExnWith Int.toString
+  "minlist [] should raise an exception"
+  (fn () => minlist [])
+
+val () =
+  Unit.checkExpectWith Int.toString
+  "minlist [1,2,3,4,0] should be 0"
+  (fn () => minlist [1,2,3,4,0])
+  0
+
 (*
 fun minlist _ = 0
 
