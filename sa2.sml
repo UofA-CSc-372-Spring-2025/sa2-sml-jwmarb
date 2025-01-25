@@ -1,10 +1,13 @@
 (* Solutions to SA2 assignment, Intro to ML *)
 
-(* Name:                                    *)
+(* Name: Joseph Marbella *)
 (* Time spent on HW6:
 *)
 
 (* Collaborators and references:
+  Deepseek R1 (671B)
+  Athene v2 Chat (72B)
+  Fuse O1 (32B)
 *)
 
 (* indicate planning to use the Unit testing module *)
@@ -12,16 +15,40 @@ use "Unit.sml";
 
 (**** Problem A ****)
 
-fun mynull []       = true
-  | mynull (_::_)   = false
+(* fun mynull []       = true
+  | mynull (_::_)   = false *)
+
+(* 
+  Explicit type definitions are a must to prevent runtime bugs!
+*)
+fun mynull ([]: 'a list): bool = true
+  | mynull _ = false
 
 val () =
     Unit.checkExpectWith Bool.toString "mynull [] should be true"
     (fn () => mynull [])
     true
 
+val () =
+    Unit.checkExpectWith Bool.toString 
+    "mynull [1] should be false"
+    (fn () => mynull [1]) (* So this is equivalent to declaring a lambda in python or a closure in javascript *)
+    false
+
+(*
+Equivalent declaration in Java:
+
+Unit.checkExpectWith(Bool::toString, "mynull [1] should be false", () -> mynull(new int[] { 1 }), false);
+*)
+
+(* 
+Unit.checkExpectWith is a function that accepts 3 parameters
+*)
+val () = Unit.checkExpectWith Bool.toString "mynull [1, 2, 3] should be false" (fn () => mynull [1, 2, 3]) false
+
 
 (**** Problem B ****)
+
 (*
 fun firstVowel _ = false
 
