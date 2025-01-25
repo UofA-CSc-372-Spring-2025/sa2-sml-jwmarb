@@ -147,6 +147,54 @@ val () =
     (fn () => zip ([1, 2, 3], [4, 5, 6]))
     [(1,4), (2,5), (3,6)]
 
+val () =
+    Unit.checkExpectWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")")) 
+    "zip ([], []) should be []"
+    (fn () => zip ([], []))
+    []
+
+val () =
+    Unit.checkExnWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")")) "zip ([1], []) should raise Mismatch"
+    (fn () => zip ([1], []))
+
+val () =
+    Unit.checkExpectWith (Unit.listString (fn (x: char, y: char) => "(" ^ Char.toString x ^ ", " ^ Char.toString y ^ ")"))
+    "zip (['a', 'b'], ['A', 'B']) should be [('a','A'), ('b','B')]"
+    (fn () => zip ([#"a", #"b"], [#"A", #"B"]))
+    [(#"a",#"A"), (#"b",#"B")]
+
+val () =
+    Unit.checkExpectWith (Unit.listString (fn (x: string, y: string) => "(" ^ String.toString x ^ ", " ^ String.toString y ^ ")"))
+    "zip ([\"one\", \"two\"], [\"1\", \"2\"]) should be [(\"one\",\"1\"), (\"two\",\"2\")]"
+    (fn () => zip (["one", "two"], ["1", "2"]))
+    [("one","1"), ("two","2")]
+
+val () =
+    Unit.checkExpectWith (Unit.listString (fn (x: bool, y: bool) => "(" ^ Bool.toString x ^ ", " ^ Bool.toString y ^ ")"))
+    "zip ([true, false], [false, true]) should be [(true,false), (false,true)]"
+    (fn () => zip ([true, false], [false, true]))
+    [(true, false), (false, true)]
+
+val () =
+    Unit.checkExnWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")"))
+    "zip ([1, 2], [3]) should raise Mismatch"
+    (fn () => zip ([1, 2], [3]))
+
+val () =
+    Unit.checkExnWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")"))
+    "zip ([1], [2, 3]) should raise Mismatch"
+    (fn () => zip ([1], [2, 3]))
+
+val () =
+    Unit.checkExnWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")"))
+    "zip ([], [1, 2]) should raise Mismatch"
+    (fn () => zip ([], [1, 2]))
+
+val () =
+    Unit.checkExnWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")"))
+    "zip ([1, 2, 3], []) should raise Mismatch"
+    (fn () => zip ([1, 2, 3], []))    
+
 (*
 exception Mismatch
 
