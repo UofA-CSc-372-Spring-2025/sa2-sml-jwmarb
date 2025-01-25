@@ -79,6 +79,19 @@ val () =
     true
 *)
 (**** Problem C ****)
+fun reverse (xs: 'a list): 'a list =  List.foldl (fn (x, acc) => x::acc) [] xs
+
+val () =
+  Unit.checkExpectWith (Unit.listString Int.toString) 
+  "reverse [1,2] should be [2,1]"
+  (fn () => reverse [1,2])
+  [2,1]
+
+val () =
+  Unit.checkExpectWith (Unit.listString Int.toString) 
+  "reverse [] should be []"
+  (fn () => reverse [])
+  []
 
 (*
 fun reverse xs = xs
