@@ -134,6 +134,19 @@ val () =
   0
 *)
 (**** Problem E ****)
+exception Mismatch
+fun zip (xs: 'a list, ys: 'a list) =
+    case (xs, ys) of
+        ([], []) => []
+      | (x::xs', y::ys') => (x, y) :: zip (xs', ys') (* xs' and ys' are tails *)
+      | _ => raise Mismatch
+
+val () =
+    Unit.checkExpectWith (Unit.listString (fn (x: int, y: int) => "(" ^ Int.toString x ^ ", " ^ Int.toString y ^ ")")) 
+    "zip ([1,2,3], [4,5,6]) should be [(1,4), (2,5), (3,6)]"
+    (fn () => zip ([1, 2, 3], [4, 5, 6]))
+    [(1,4), (2,5), (3,6)]
+
 (*
 exception Mismatch
 
