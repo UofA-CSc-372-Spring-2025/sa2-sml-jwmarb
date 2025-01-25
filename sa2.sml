@@ -48,7 +48,28 @@ val () = Unit.checkExpectWith Bool.toString "mynull [1, 2, 3] should be false" (
 
 
 (**** Problem B ****)
+fun firstVowel ([]: char list): bool = false
+  | firstVowel (#"a"::_) = true
+  | firstVowel (#"e"::_) = true
+  | firstVowel (#"i"::_) = true
+  | firstVowel (#"o"::_) = true
+  | firstVowel (#"u"::_) = true
+  | firstVowel (_) = false
 
+val () =
+    Unit.checkExpectWith Bool.toString "firstVowel 'a' should be true"
+    (fn () => firstVowel [#"a", #"b"])
+    true
+
+val () =
+    Unit.checkExpectWith Bool.toString "firstVowel 'x' should be false"
+    (fn () => firstVowel [#"x", #"a"])
+    false
+
+val () =
+    Unit.checkExpectWith Bool.toString "firstVowel empty list should be false"
+    (fn () => firstVowel [])
+    false
 (*
 fun firstVowel _ = false
 
@@ -58,6 +79,7 @@ val () =
     true
 *)
 (**** Problem C ****)
+
 (*
 fun reverse xs = xs
 
