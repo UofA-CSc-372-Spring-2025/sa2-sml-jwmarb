@@ -1,7 +1,7 @@
 (* Solutions to SA2 assignment, Intro to ML *)
 
 (* Name: Joseph Marbella *)
-(* Time spent on HW6:
+(* Time spent on HW6: 6 hours
 *)
 
 (* Collaborators and references:
@@ -14,9 +14,6 @@
 use "Unit.sml";
 
 (**** Problem A ****)
-
-(* fun mynull []       = true
-  | mynull (_::_)   = false *)
 
 (* 
   Explicit type definitions are a must to prevent runtime bugs!
@@ -70,14 +67,7 @@ val () =
     Unit.checkExpectWith Bool.toString "firstVowel empty list should be false"
     (fn () => firstVowel [])
     false
-(*
-fun firstVowel _ = false
 
-val () =
-    Unit.checkExpectWith Bool.toString "firstVowel 'ack' should be true"
-    (fn () => firstVowel [#"a",#"c",#"k"])
-    true
-*)
 (**** Problem C ****)
 fun reverse (xs: 'a list): 'a list =  List.foldl (fn (x, acc) => x::acc) [] xs
 
@@ -93,15 +83,6 @@ val () =
   (fn () => reverse [])
   []
 
-(*
-fun reverse xs = xs
-
-val () =
-  Unit.checkExpectWith (Unit.listString Int.toString) 
-  "reverse [1,2] should be [2,1]"
-  (fn () => reverse [1,2])
-  [2,1]
-*)
 (**** Problem D ****)
 exception EmptyList
 
@@ -119,20 +100,6 @@ val () =
   (fn () => minlist [1,2,3,4,0])
   0
 
-(*
-fun minlist _ = 0
-
-val () =
-  Unit.checkExnWith Int.toString
-  "minlist [] should raise an exception"
-  (fn () => minlist [])
-
-val () =
-  Unit.checkExpectWith Int.toString
-  "minlist [1,2,3,4,0] should be 0"
-  (fn () => minlist [1,2,3,4,0])
-  0
-*)
 (**** Problem E ****)
 exception Mismatch
 fun zip (xs: 'a list, ys: 'a list) =
@@ -195,43 +162,108 @@ val () =
     "zip ([1, 2, 3], []) should raise Mismatch"
     (fn () => zip ([1, 2, 3], []))    
 
-(*
-exception Mismatch
-
-fun zip _ = []
-*)
 (**** Problem F ****)
-(*
-fun concat xs = xs
-*)
+
+fun concat (lst: 'a list list) = List.foldr (fn (l, acc) => l @ acc) [] lst
+
+val () = 
+    Unit.checkExpectWith (Unit.listString Unit.intString) "empty list"
+    (fn() => concat [])
+    []
+
+val () = 
+    Unit.checkExpectWith (Unit.listString Unit.intString) "single sublist"
+    (fn() => concat [[1,2,3]])
+    [1,2,3]
+
+val () = 
+    Unit.checkExpectWith (Unit.listString Unit.intString) "multiple sublists"
+    (fn() => concat [[1], [2,3], [4,5]])
+    [1,2,3,4,5]
+
+val () = 
+    Unit.checkExpectWith (Unit.listString Unit.intString) "mixed empty and non-empty"
+    (fn() => concat [[], [1,2], [], [3]])
+    [1,2,3]
+  
 (**** Problem G ****)
-(*
-fun isDigit _    = false;
-*)
+
+fun isDigit(c: char) =
+  case c of
+    #"0" => true
+  | #"1" => true
+  | #"2" => true
+  | #"3" => true
+  | #"4" => true
+  | #"5" => true
+  | #"6" => true
+  | #"7" => true
+  | #"8" => true
+  | #"9" => true
+  | _ => false
+
+val () =
+    Unit.checkExpectWith Bool.toString "isDigit('a') returns false" 
+    (fn () => isDigit(#"a"))
+    false
+
+val () =
+    Unit.checkExpectWith Bool.toString "isDigit('0') returns true" 
+    (fn () => isDigit(#"0"))
+    true
+
 (**** Problem H ****)
-(*
-fun isAlpha c = false
-*)
+
+fun isAlpha (c: char): bool = 
+    let val ord = Char.ord c
+    in
+        (ord >= 65 andalso ord <= 90) orelse (ord >= 97 andalso ord <= 122)
+    end
+
+val () =
+    Unit.checkExpectWith Bool.toString "isAlpha('1') returns false"
+    (fn () => isAlpha(#"1"))
+    false
+
+val () =
+    Unit.checkExpectWith Bool.toString "isAlpha('a' returns true)"
+    (fn () => isAlpha(#"a"))
+    true
+
 (**** Problem I ****)
-(*
-fun svgCircle (cx, cy, r, fill) = "NOT IMPLEMENTED YET"
+
+fun svgCircle (cx: int, cy: int, r: int, fill: string) =
+    "<circle cx=\"" ^ Int.toString cx ^ "\" cy=\"" ^ Int.toString cy ^ "\" r=\"" ^ Int.toString r ^ "\" fill=\"" ^ fill ^ "\" />"
 
 val () =
   Unit.checkExpectWith (fn x => x)
   "svgCircle (200, 300, 100, \"red\") should return <circle cx=\"200\" cy=\"300\" r=\"100\" fill=\"red\" />"
   (fn () => svgCircle (200, 300, 100, "red"))
   "<circle cx=\"200\" cy=\"300\" r=\"100\" fill=\"red\" />";
-*)
+
 (**** Problem J ****)
-(*
-fun partition p (x :: xs) = ([],[])
+
+fun partition p nil = (nil, nil)
+  | partition p (x::xs) =
+    let
+        val (yes, no) = partition p xs
+    in
+        if p x then (x :: yes, no)
+               else (yes, x :: no)
+    end;
 
 val () =
   Unit.checkExpectWith (fn (l1, l2) => "(" ^ Unit.listString Int.toString l1 ^ ", " ^ Unit.listString Int.toString l2 ^ ")")
   "partition (fn x => x mod 2 = 0) [1, 2, 3, 4, 5] should return ([2, 4], [1, 3, 5])"
   (fn () => partition (fn x => x mod 2 = 0) [1, 2, 3, 4, 5])
   ([2, 4], [1, 3, 5]);
-*)
+
+val () =
+  Unit.checkExpectWith (fn (l1, l2) => "(" ^ Unit.listString Char.toString l1 ^ ", " ^ Unit.listString Char.toString l2 ^ ")")
+  "partition (Char.isAlpha [a, 1, b, 2, c]) returns [[a, b, c], [1, 2]]"
+  (fn () => partition Char.isAlpha [#"a", #"1", #"b", #"2", #"c"])
+  ([#"a", #"b", #"c"], [#"1", #"2"]);
+
 
 (* Unit testing reporting *)
 
